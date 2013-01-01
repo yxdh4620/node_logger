@@ -1,7 +1,7 @@
 {
-  "name"            : "node-simple-logger"
+  "name"            : "simple-logger"
     , "version"         : "0.1.0"
-    , "description"     : "a simple logger utility for nodejs"
+    , "description"     : "a simple logger utility for nodejs with debug level support, color output and message timestamp"
     , "homepage"        : "https://github.com/SGF-Games/node-simple-logger"
     , "keywords"        : ["logger", "log", "utility"]
     , "author"          : "SGF-Games"
