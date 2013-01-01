@@ -1,0 +1,21 @@
+{
+  "name"            : "node-simple-logger"
+    , "version"         : "0.1.0"
+    , "description"     : "a simple logger utility for nodejs"
+    , "homepage"        : "https://github.com/SGF-Games/node-simple-logger"
+    , "keywords"        : ["logger", "log", "utility"]
+    , "author"          : "SGF-Games"
+    , "main"            : "./lib/logger"
+    , "dependencies"    : {
+    }
+  , "devDependencies" : {
+  }
+  , "repository"      : {
+    "type"          : "git"
+      , "url"           : "git://github.com/SGF-Games/node-simple-logger.git"
+  }
+  , "licenses"        : [{
+    "type"          :  "MIT"
+      , "url"           : "http://opensource.org/licenses/mit-license.php"
+  }]
+}
