@@ -1,4 +1,13 @@
 node-simple-logger
 ==================
 
-a simple logger utility for nodejs
+A simple `Logger` utility supports basic debugging level controlling
+
+Usage:
+
+  logger = require("./util/logger")
+  logger.setLevel(logger.ERROR)
+  logger.error "msg"
+
+
+
