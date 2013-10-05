@@ -37,7 +37,7 @@ logger.setPath(pathToLogFile);
 ```
 
 ## Contributing
-mostly written by @wuyuntao
+mostly written by [@wuyuntao](https://github.com/wuyuntao)
 
 ## License
 Copyright (c) 2013 yi
