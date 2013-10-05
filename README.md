@@ -34,6 +34,15 @@ logger.setLevel(logger.INFO);
 // custom log output path
 logger.setPath(pathToLogFile);
 
+// sample log messages:
+// [9087] 2013-10-05T20:27:34.803Z LOG - [json_util::getJsonFromFile] path:/Users/ty/workspaces/runway/assets/json/missions.json
+// [9087] 2013-10-05T20:27:34.803Z WARNING - [mission_asset::loadDepot]: load mission json data is NULL.
+// [9087] 2013-10-05T20:27:34.803Z LOG - [json_util::getJsonFromFile] path:/Users/ty/workspaces/runway/assets/json/game_levels.json
+// [9087] 2013-10-05T20:27:34.804Z LOG - [json_util::getJsonFromFile] path:/Users/ty/workspaces/runway/assets/json/monsters.json
+// [9087] 2013-10-05T20:27:34.812Z INFO - [db.connectToMySQL] MySQL client is ready.
+
+
+
 ```
 
 ## Contributing
