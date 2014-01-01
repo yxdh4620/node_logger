@@ -1,5 +1,6 @@
 ## Module dependencies
 fs = require "fs"
+util = require "util"
 
 # Debugging levels
 ERROR = 3
@@ -25,9 +26,6 @@ NAME_TAG =
 ROTATION_INTERVAL = 4 * 60 * 60 * 1000
 # 刷新日志的间隔（5秒钟）
 FLUSH_INTERVAL = 5 * 1000
-
-# Local reference of Array join() method
-join = Array.prototype.join
 
 # A `Logger` supports basic debugging level controlling
 #
@@ -72,11 +70,11 @@ class Logger
     if @isDebug
       # 如果是在调试环境下，实时输出日志
       @[name] = ->
-        console[name](PID, (new Date).toISOString(), tag, join.call(arguments))
+        console[name](PID, (new Date).toISOString(), tag, util.format.apply(null, arguments))
     else
       # 如果在生产环境下，异步输出日志
       @[name] = =>
-        @_cache[name].push "#{PID} #{new Date().toISOString()} #{tag} #{join.call(arguments)}\r\n"
+        @_cache[name].push "#{PID} #{new Date().toISOString()} #{tag} #{util.format.apply(null, arguments)}\r\n"
         return
 
   _defineNoopMethod: (name) ->
