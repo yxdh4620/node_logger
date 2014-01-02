@@ -70,11 +70,11 @@ class Logger
     if @isDebug
       # 如果是在调试环境下，实时输出日志
       @[name] = ->
-        console[name](PID, (new Date).toISOString(), tag, util.format.apply(null, arguments))
+        console[name](PID, (new Date).toLocaleString(), tag, util.format.apply(null, arguments))
     else
       # 如果在生产环境下，异步输出日志
       @[name] = =>
-        @_cache[name].push "#{PID} #{new Date().toISOString()} #{tag} #{util.format.apply(null, arguments)}\r\n"
+        @_cache[name].push "#{PID} #{new Date().toLocaleString()} #{tag} #{util.format.apply(null, arguments)}\r\n"
         return
 
   _defineNoopMethod: (name) ->
