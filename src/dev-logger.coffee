@@ -1,31 +1,10 @@
 ## Module dependencies
 fs = require "fs"
 util = require "util"
-
-# Debugging levels
-ERROR = 3
-WARN = 2
-INFO = 1
-LOG = 0
-
-# Empty function
-NOOP_FN = ->
-
-# A list of debugging levels
-LEVELS = ["log", "info", "warn", "error"]
+LoggerLevel = require './enums/logger_level'
 
 PID = "[#{process.pid}]"
 
-NAME_TAG =
-  "log": "LOG -"
-  "info": "\u001b[32mINFO\u001b[0m -"
-  "warn": "\u001b[33mWARNING\u001b[0m -"
-  "error": "\u001b[31mERROR\u001b[0m -"
-
-# 更新日志位置的时间间隔（4小时）
-ROTATION_INTERVAL = 4 * 60 * 60 * 1000
-# 刷新日志的间隔（5秒钟）
-FLUSH_INTERVAL = 5 * 1000
 
 # A `Logger` supports basic debugging level controlling
 #
@@ -36,15 +15,28 @@ FLUSH_INTERVAL = 5 * 1000
 #   logger.error "msg"
 class Logger
 
-  constructor: ->
-    @_level = LOG
-    @_path = null
-    @_resetInterval = null
-    @_flushInterval = null
-    @setLevel(@_level)
-    @setPath(@_path)
-    @_async()
-    @isDebug = false
+  constructor: (options={}) ->
+    @_isDebug = options.isDebug || false
+    @_level = options.level || LoggerLevel.LOG
+    @_path = options.level
+    @_resetInterval = options.resetInterval
+    @_flushInterval = options.flushInterval
+    @setLevel @_level
+    @setPath @_path
+    @_cache = {}
+    for key in LoggerLevel.LEVELS
+      @_cache[key] = []
+    #@_async()
+
+  # 执行一个异步的加载日志的过程
+  _async: ->
+    @_flushInterval = setInterval =>
+      for key, value of @_cache
+        continue if value.length == 0
+        logs = value.join("")
+        if @_flushLog(key, logs)
+          value.length = 0
+    , 5 * 1000
 
   # Set log path
   setPath: (path) ->
@@ -60,14 +52,14 @@ class Logger
 
   # Set debugging level
   setLevel: (level=0) ->
-    for method, i in LEVELS
+    for method, i in LoggerLevel.LEVELS
       if i < level then @_defineNoopMethod(method) else @_defineMethod(method)
     @_level = level
     this
 
   _defineMethod: (name) ->
-    tag = NAME_TAG[name]
-    if @isDebug
+    tag = LoggerLevel.NAME_TAG[name]
+    if @_isDebug
       # 如果是在调试环境下，实时输出日志
       @[name] = ->
         console[name](PID, (new Date).toLocaleString(), tag, util.format.apply(null, arguments))
@@ -80,20 +72,6 @@ class Logger
   _defineNoopMethod: (name) ->
     @[name] = NOOP_FN
 
-  # 执行一个异步的加载日志的过程
-  _async: ->
-    @_cache =
-      log: []
-      info: []
-      warn: []
-      error: []
-    @_flushInterval = setInterval =>
-      for key, value of @_cache
-        continue if value.length == 0
-        logs = value.join("")
-        if @_flushLog(key, logs)
-          value.length = 0
-    , 5 * 1000
 
   # 把日志写入文件
   _flushLogToFile: (level, logs) ->
@@ -145,14 +123,20 @@ class Logger
     return
 
 # Default logger for all modules
-logger = new Logger()
-logger.ERROR = ERROR
-logger.WARN = WARN
-logger.INFO = INFO
-logger.LOG = LOG
+#logger = new Logger()
+#logger.ERROR = ERROR
+#logger.WARN = WARN
+#logger.INFO = INFO
+#logger.LOG = LOG
+#
+#
+#module.exports = logger
+
+Logger.ERROR = LoggerLevel.ERROR
+Logger.WARN = LoggerLevel.WARN
+Logger.INFO = LoggerLevel.INFO
+Logger.LOG = LoggerLevel.LOG
+
+module.exports = Logger
 
 
-
-
-
-module.exports = logger
